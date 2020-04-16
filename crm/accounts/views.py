@@ -5,7 +5,7 @@ def home(request):
     return render(request, 'accounts/dashboard.html')
 
 def products(request):
-    return HttpResponse('accounts/products.html')
+    return render(request, 'accounts/products.html')
 
 def customer(request):
-    return HttpResponse('accounts/customer.html')
+    return render(request, 'accounts/customer.html')
