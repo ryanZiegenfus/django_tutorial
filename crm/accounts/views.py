@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 
 # Create your views here.
 from .models import *
@@ -17,13 +18,17 @@ from .decorators import unauthenticated_user, allowed_users, admin_only
 
 @unauthenticated_user
 def registerPage(request):
+
     form = CreateUserForm()
-    if request.method == "POST":
+    if request.method == 'POST':
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(requests, 'accounr was created for')
+            user = form.save()
+            username = form.cleaned_data.get('username')
+
+            group = Group.objects.get(name='Customer')
+            user.groups.add(group)
+            messages.success(request, 'account was created for' + username)
             return redirect('login')
 
     context = {'form': form}
