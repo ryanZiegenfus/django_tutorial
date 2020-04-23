@@ -13,14 +13,11 @@ from django.contrib.auth.decorators import login_required
 from .models import *
 from .forms import OrderForm, CreateUserForm
 from .filters import OrderFilter
+from .decorators import unauthenticated_user
 
-
+@unauthenticated_user
 def registerPage(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        form = CreateUserForm()
-
+    form = CreateUserForm()
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
@@ -32,9 +29,9 @@ def registerPage(request):
     context = {'form': form}
     return render(request, 'accounts/register.html', context)
 
+@unauthenticated_user
 def loginPage(request):
-    if request.user.is_authenticated:
-        return redirect('home')
+
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -74,6 +71,10 @@ def home(request):
         }
 
     return render(request, 'accounts/dashboard.html', context)
+
+def userPage(request):
+    context = {}
+    return render(request, 'accounts/user.html')
 
 @login_required(login_url='login')
 def products(request):
