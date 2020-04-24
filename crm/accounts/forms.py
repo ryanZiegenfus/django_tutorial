@@ -5,6 +5,12 @@ from django import forms
 
 from .models import *
 
+class CustomerForm(ModelForm):
+    class Meta:
+        model = Customer
+        fileds = '__all__'
+        exclude = ['user']
+
 class OrderForm(ModelForm):
     class Meta:
         model = Order
